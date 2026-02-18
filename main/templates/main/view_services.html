@@ -1,0 +1,163 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View Services - Admin</title>
+    <link rel="stylesheet" href="{% static 'main/style.css' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #fff8f0;
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: #ff6600;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            color: #fff;
+        }
+
+        .navbar a {
+            color: #fff;
+            margin-right: 15px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .navbar .logo {
+            font-size: 20px;
+            font-weight: bold;
+            margin-right: auto;
+        }
+
+        .navbar span.earnings {
+            margin-left: 15px;
+            font-weight: bold;
+        }
+
+        .navbar a.logout {
+            margin-left: auto;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #ff6600;
+            margin-bottom: 30px;
+        }
+
+        /* Services container */
+        .services-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .service-card {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            border-radius: 10px;
+            overflow: hidden;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .service-card:hover {
+            transform: scale(1.03);
+        }
+
+        .service-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .service-card span {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.5);
+            color: #fff;
+            text-align: center;
+            padding: 5px;
+            font-weight: bold;
+        }
+
+        /* Delete button styling */
+        .delete-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background-color: rgba(214, 211, 211, 0.8);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            font-size: 16px;
+            line-height: 28px;
+            text-align: center;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .delete-btn:hover {
+            background-color: rgb(214, 206, 206);
+        }
+
+        p.no-services {
+            text-align: center;
+            color: #ff6600;
+            font-weight: bold;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <a href="{% url 'admin_dashboard' %}" class="logo">GoService</a>
+        <a href="{% url 'admin_view_customers' %}">View Customers</a>
+        <a href="{% url 'admin_view_providers' %}">View Service Providers</a>
+        <a href="{% url 'view_services' %}">View Services</a>
+        <a href="{% url 'add_service' %}">Add Services</a>
+        <a href="{% url 'logout' %}" class="logout">Logout</a>
+    </div>
+
+    <div class="content">
+        <h2>Services</h2>
+        <div class="services-container">
+            {% for service in services %}
+            <div class="service-card" onclick="location.href='{% url 'providers_by_profession' service.profession_name %}'">
+                <img src="{{ service.image.url }}" alt="{{ service.profession_name }}">
+                <span>{{ service.profession_name }}</span>
+
+                <!-- Delete button -->
+                <form action="{% url 'delete_service' service.id %}" method="post"
+                      onsubmit="return confirm('Are you sure you want to delete this service?');"
+                      style="position:absolute; top:8px; right:8px;"
+                      onclick="event.stopPropagation();">
+                    {% csrf_token %}
+                    <button type="submit" class="delete-btn" title="Delete Service">🗑️</button>
+                </form>
+            </div>
+            {% empty %}
+            <p class="no-services">No services added yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+</body>
+</html>

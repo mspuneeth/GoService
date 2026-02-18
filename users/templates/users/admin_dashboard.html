@@ -1,0 +1,112 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard - GoService</title>
+    <link rel="stylesheet" href="{% static 'main/style.css' %}">
+
+    <!-- Google Fonts: Pacifico -->
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+
+    <style>
+        body { margin:0; font-family: Arial, sans-serif; background-color: #fff8f0; }
+
+        /* Navbar */
+        .navbar { 
+            background-color: #ff6600; 
+            padding: 10px; 
+            display: flex; 
+            align-items: center; 
+            color: #fff; 
+        }
+        .navbar a { color: #fff; margin-right: 15px; text-decoration: none; font-weight: bold; }
+        .navbar a:hover { text-decoration: underline; }
+        .navbar .logo { 
+            font-family: 'Pacifico', cursive; 
+            font-size: 1.8rem; 
+            margin-right: auto; 
+            cursor: pointer;
+        }
+
+        /* Hero Image */
+        .hero-image {
+            width: 100%;
+            height: 70vh; /* adjust height */
+            background-image: url("{% static 'main/welcome.png' %}");
+            background-size: cover;
+            background-position: center;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: #ff6600;
+            color: white;
+            text-align: center;
+            padding: 15px 10px;
+            font-size: 0.9rem;
+            margin-top: auto;
+        }
+
+        .footer-links {
+            margin-bottom: 8px;
+        }
+
+        .footer-links a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: bold;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+
+        /* Content Sections */
+        .content { padding: 20px; }
+        .section { background-color: #fff3e6; padding: 15px; margin-bottom: 20px; border-radius: 8px; }
+        .section h2 { margin-top: 0; }
+
+        img.profile-pic { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; }
+        table { width: 100%; border-collapse: collapse; }
+        table th, table td { padding: 8px; border: 1px solid #ffcc99; text-align: left; }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <a href="{% url 'admin_dashboard' %}" class="logo">GoService</a>
+    <a href="{% url 'admin_view_customers' %}">View Customers</a>
+    <a href="{% url 'admin_view_providers' %}">View Service Providers</a>
+    <a href="{% url 'view_services' %}">View Services</a>
+    <a href="{% url 'add_service' %}">Add Services</a>
+    <span style="margin-left: 15px; font-weight: bold;">
+      Earnings: ₹{{ total_earnings }}
+    </span>
+
+    <a href="{% url 'logout' %}" style="margin-left:auto;">Logout</a>
+</div>
+
+<!-- Hero Image Section -->
+<div class="hero-image"></div>
+
+<div class="content">
+    <!-- You can add dashboard sections here -->
+</div>
+
+<!-- Footer -->
+<footer>
+    <div class="footer-links">
+        <a href="{% url 'admin_dashboard' %}">Dashboard</a> |
+        <a href="{% url 'admin_view_customers' %}">Customers</a> |
+        <a href="{% url 'admin_view_providers' %}">Providers</a> |
+        <a href="{% url 'view_services' %}">Services</a>
+    </div>
+    <div>© 2025 GoService.</div>
+    <div>Developed by <strong>PUNEETH</strong></div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,95 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - Service Providers</title>
+    <link rel="stylesheet" href="{% static 'main/style.css' %}">
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #fff8f0; margin: 0; }
+        
+        /* Navbar */
+        .navbar { 
+            background-color: #ff6600; 
+            padding: 10px 20px; 
+            display: flex; 
+            align-items: center; 
+            color: #fff; 
+        }
+        .navbar .logo { font-size: 20px; font-weight: bold; margin-right: auto; }
+        .navbar a { 
+            color: #fff; 
+            margin-right: 15px; 
+            text-decoration: none; 
+            font-weight: bold; 
+        }
+        .navbar a:hover { text-decoration: underline; }
+        .navbar .logout { margin-left: auto; }
+
+        /* Table styling */
+        .content { padding: 20px; }
+        table { width: 100%; border-collapse: collapse; background-color: #fff; border-radius: 8px; overflow: hidden; }
+        th, td { padding: 10px; border: 1px solid #ffcc99; text-align: left; }
+        th { background-color: #ffe0b3; }
+        img.profile-pic { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; }
+        .btn-delete { background-color: #ff3300; color: white; padding: 6px 10px; text-decoration: none; border-radius: 4px; }
+        .btn-delete:hover { background-color: #cc0000; }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<div class="navbar">
+    <div class="logo">GoService</div>
+    <a href="{% url 'admin_dashboard' %}">Dashboard</a>
+    <a href="{% url 'admin_view_providers' %}">View Service Providers</a>
+    <a href="{% url 'admin_view_customers' %}">View Customers</a>
+    <a href="{% url 'view_services' %}">View Services</a>
+    <a href="{% url 'add_service' %}">Add Services</a>
+    <a href="{% url 'logout' %}" class="logout">Logout</a>
+</div>
+
+<!-- Content -->
+<div class="content">
+    <h2 style="color:#ff6600;">Service Providers</h2>
+
+    <table>
+        <tr>
+            <th>Profile Pic</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Profession</th>
+            <th>Address</th>
+            <th>Price</th>
+            <th>Experience</th>
+            <th>Actions</th>
+        </tr>
+        {% for data in providers_data %}
+        <tr>
+            <td>
+                {% if data.provider.user.profile_pic %}
+                    <img class="profile-pic" src="{{ data.provider.user.profile_pic.url }}">
+                {% else %}
+                    <img class="profile-pic" src="{% static 'main/default_profile.png' %}">
+                {% endif %}
+            </td>
+            <td>{{ data.provider.user.username }}</td>
+            <td>{{ data.provider.user.email }}</td>
+            <td>{{ data.service.phone }}</td>
+            <td>{{ data.service.service_type.profession_name }}</td>
+            <td>{{ data.service.address }}</td>
+            <td>{{ data.service.price }}</td>
+            <td>{{ data.service.experience }}</td>
+            <td>
+                <a href="{% url 'admin_delete_provider' data.provider.id %}" class="btn-delete" onclick="return confirm('Are you sure you want to delete this provider?');">Delete</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="9">No providers with listed services found.</td></tr>
+        {% endfor %}
+    </table>
+</div>
+
+</body>
+</html>

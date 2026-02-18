@@ -1,0 +1,359 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GoService - Home Services</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{% static 'main/style.css' %}">
+
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: #fff8f0;
+      padding-right: 20px;
+    }
+
+    .navbar {
+      background-color: #ff9900;
+    }
+
+    .logo-text {
+      font-family: 'Pacifico', cursive;
+      color: white !important;
+      font-size: 1.8rem;
+    }
+
+    .nav-link {
+      color: white !important;
+      font-weight: bold;
+    }
+
+    /* Hero Section */
+    .hero-section img {
+      height: 90vh;
+      object-fit: cover;
+    }
+
+    .hero-text {
+      font-size: 2.5rem;
+      font-weight: bold;
+      text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6);
+    }
+
+    /* About Section */
+    .about-section {
+      background-color: #fff;
+      padding: 60px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 40px;
+    }
+
+    .about-text {
+      max-width: 600px;
+      font-family: 'Roboto', sans-serif;
+      color: #444;
+      font-size: 1.2rem;
+      line-height: 1.8;
+      text-align: left;
+    }
+
+    .about-section h2 {
+      color: #ff6600;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    .about-img {
+      width: 300px;
+      max-width: 100%;
+      border-radius: 10px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .about-img:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+      cursor: pointer;
+    }
+
+    /* Services Section */
+    .services-section {
+      padding: 60px 20px;
+      background-color: #fff8f0;
+    }
+
+    .services-section h2 {
+      color: #ff6600;
+      font-weight: bold;
+      margin-bottom: 40px;
+    }
+
+    .service-card-link {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .service-card-link .card {
+      background: #fff3e6;
+      border-radius: 10px;
+      padding: 15px;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+
+    .service-card-link .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .service-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+
+    .service-card-link .card h5 {
+      color: #ff6600;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    /* Reviews Section */
+    .reviews-section {
+      background-color: #fff8f0;
+      padding: 60px 20px;
+    }
+
+    .reviews-section img {
+      border: 3px solid #ff6600;
+      object-fit: cover;
+    }
+
+    .reviews-section p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      opacity: 0;
+      animation: fadeIn 1.2s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .text-orange {
+      color: #ff6600;
+    }
+
+    /* Footer */
+    .footer a {
+      text-decoration: none;
+      color: white;
+    }
+
+    .footer .contact-info i {
+      margin-right: 5px;
+    }
+
+    .footer .social-icons a {
+      margin: 0 8px;
+      color: white;
+      font-size: 1.2rem;
+    }
+
+    .footer .social-icons a:hover {
+      color: #ff9900;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand logo-text" href="{% url 'home' %}">GoService</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="#about">About Us</a></li>
+          <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
+          <li class="nav-item"><a class="nav-link" href="#reviews">Reviews</a></li>
+
+          <!-- Signup Dropdown -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Signup</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="{% url 'signup_customer' %}">Customer/User</a></li>
+              <li><a class="dropdown-item" href="{% url 'signup_provider' %}">Service Provider</a></li>
+            </ul>
+          </li>
+
+          <!-- Login Dropdown -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Login</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="{% url 'login_customer' %}">Customer Login</a></li>
+              <li><a class="dropdown-item" href="{% url 'login_provider' %}">Service Provider Login</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="{% url 'login_admin' %}">Admin Login</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero-section text-center position-relative">
+    <img src="{% static 'main/lastfix1.png' %}" alt="Home Services Hero Image" class="img-fluid w-100">
+    <div class="hero-text position-absolute top-50 start-50 translate-middle text-white">
+      Reliable Home Services at Your Doorstep
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="about-section">
+    <div class="about-text">
+      <h2>Why GoService?</h2>
+      <p>
+        GoService connects you with trusted professionals to handle your home service needs —
+        from electricians and plumbers to cleaners and painters. We ensure quick, affordable,
+        and quality services at your doorstep with just a few clicks.
+      </p>
+      <h2>Empowering Local Skills</h2>
+      <p>
+        GoService empowers service providers to grow their business by connecting them directly with customers who need their expertise.
+        With GoService, professionals can reach a wider audience, build trust through transparent communication,
+        and focus on what they do best — delivering quality service.
+      </p>
+    </div>
+    <div>
+      <img src="{% static 'main/exterior1.png' %}" alt="About GoService" class="about-img">
+    </div>
+  </section>
+
+  <!-- Services Section -->
+  <section id="services" class="services-section">
+    <div class="container text-center">
+      <h2>Our Services</h2>
+      <div class="row justify-content-center g-4">
+        <div class="col-md-3 col-sm-6">
+          <a href="{% url 'login_customer' %}" class="service-card-link">
+            <div class="card">
+              <img src="{% static 'main/service-4.jpg' %}" alt="Electrician" class="service-img">
+              <h5>Electrician</h5>
+            </div>
+          </a>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <a href="{% url 'login_customer' %}" class="service-card-link">
+            <div class="card">
+              <img src="{% static 'main/plumber.png' %}" alt="Plumber" class="service-img">
+              <h5>Plumber</h5>
+            </div>
+          </a>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <a href="{% url 'login_customer' %}" class="service-card-link">
+            <div class="card">
+              <img src="{% static 'main/clean.webp' %}" alt="Cleaner" class="service-img">
+              <h5>Cleaner</h5>
+            </div>
+          </a>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <a href="{% url 'login_customer' %}" class="service-card-link">
+            <div class="card">
+              <img src="{% static 'main/painter.jpeg' %}" alt="Painter" class="service-img">
+              <h5>Painter</h5>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Reviews Section -->
+  <section id="reviews" class="reviews-section">
+    <div class="container text-center">
+      <h2 class="mb-4 text-orange">What Our Customers Say</h2>
+
+      <div id="reviewCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="5000" data-bs-pause="hover">
+        <div class="carousel-inner">
+          {% for review in reviews %}
+          <div class="carousel-item {% if forloop.first %}active{% endif %}">
+            <div class="d-flex flex-column align-items-center">
+              <img src="{{ review.customer.user.profile_pic.url }}"
+                   class="rounded-circle mb-3 shadow"
+                   alt="{{ review.customer.user.username }}"
+                   width="90" height="90"
+                   onerror="this.src='https://via.placeholder.com/90?text=User';">
+              <h5 class="fw-bold text-orange">{{ review.customer.user.username }}</h5>
+              <p class="fst-italic text-muted" style="max-width: 650px;">
+                <i class="fa-solid fa-quote-left text-orange me-2"></i>
+                {{ review.content }}
+                <i class="fa-solid fa-quote-right text-orange ms-2"></i>
+              </p>
+            </div>
+          </div>
+          {% empty %}
+          <div class="carousel-item active">
+            <p class="text-muted">No reviews yet — be the first to share your experience!</p>
+          </div>
+          {% endfor %}
+        </div>
+
+        <button class="carousel-control-prev" type="button" data-bs-target="#reviewCarousel" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon bg-dark rounded-circle"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#reviewCarousel" data-bs-slide="next">
+          <span class="carousel-control-next-icon bg-dark rounded-circle"></span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white text-center py-4 mt-5 footer">
+    <div class="contact-info mb-2">
+      <i class="fas fa-envelope"></i> info@goservice.com &nbsp; | &nbsp;
+      <i class="fas fa-phone"></i> +91 9876543210 &nbsp; | &nbsp;
+      <i class="fas fa-map-marker-alt"></i> Bengaluru, India
+    </div>
+    <div class="social-icons mb-2">
+      <a href="#"><i class="fab fa-facebook-f"></i></a>
+      <a href="#"><i class="fab fa-twitter"></i></a>
+      <a href="#"><i class="fab fa-instagram"></i></a>
+    </div>
+    &copy; 2025 <strong>GoService</strong> — By <strong>Puneeth</strong>.
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

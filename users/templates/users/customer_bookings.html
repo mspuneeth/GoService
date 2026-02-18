@@ -1,0 +1,174 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Bookings - GoService</title>
+
+    <!-- Google Font for Logo -->
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+
+    <!-- CSS Links -->
+    <link rel="stylesheet" href="{% static 'main/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        /* Navbar */
+        .navbar-custom { background-color: #ff9900; }
+        .navbar-custom .nav-link { color: #fff; }
+        .navbar-custom .nav-link:hover { color: #ffd699; }
+        .navbar-brand.logo-text {
+            font-family: 'Pacifico', cursive;
+            font-size: 1.8rem;
+            letter-spacing: 1px;
+            cursor: pointer;
+            color: #fff;
+        }
+
+        body { background-color: #fff8f0; }
+        .booking-card { background-color: #fff; border-radius: 10px; box-shadow: 0 3px 6px rgba(0,0,0,0.1); padding: 15px; margin-bottom: 20px; }
+        .booking-card img { width: 60px; height: 60px; object-fit: cover; }
+        .status-bar { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; }
+        .status-step { text-align: center; flex: 1; position: relative; }
+        .status-step i { font-size: 20px; }
+        .status-step.completed i { color: green; }
+        .status-step.active i { color: orange; }
+        .status-step::after { content: ''; position: absolute; top: 10px; right: -50%; height: 3px; background: #ddd; width: 100%; z-index: -1; }
+        .status-step:last-child::after { display: none; }
+        .cancel-btn { margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-custom">
+    <div class="container">
+        <a class="navbar-brand logo-text" href="{% url 'customer_dashboard' %}">GoService</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link" href="{% url 'customer_dashboard' %}">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'customer_services' %}">Our Services</a></li>
+                <li class="nav-item"><a class="nav-link active" href="{% url 'customer_bookings' %}">My Bookings</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'customer_profile' %}">Profile</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'customer_review' %}">Review</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Page Content -->
+<div class="container mt-4">
+    <h2 class="mb-3">Current Bookings</h2>
+
+    {% if current_bookings %}
+        {% for booking in current_bookings %}
+            <div class="booking-card">
+                <div class="d-flex align-items-center mb-3">
+                    {% if booking.provider.user.profile_pic %}
+                        <img src="{{ booking.provider.user.profile_pic.url }}" class="rounded-circle me-3">
+                    {% else %}
+                        <img src="{% static 'main/default-profile.png' %}" class="rounded-circle me-3">
+                    {% endif %}
+                    <div>
+                        <h5>{{ booking.provider.user.username }}</h5>
+                        <small>{{ booking.provider.user.email }}</small>
+                    </div>
+                </div>
+
+                <p><strong>Phone:</strong> {{ booking.service.phone }}</p>
+                <p><strong>Address:</strong> {{ booking.service.address }}</p>
+                <p><strong>Service:</strong> {{ booking.service.service_type.profession_name }}</p>
+                <p><strong>Price:</strong> ₹{{ booking.service.price }}</p>
+                <p><strong>Scheduled:</strong> {{ booking.schedule_date }} | {{ booking.timing }}</p>
+
+                <!-- Status Tracking -->
+                <div class="status-bar">
+                    <div class="status-step {% if booking.status == 'pending' %}active{% elif booking.status in 'confirmed arriving completed' %}completed{% endif %}">
+                        <i class="fas fa-clock"></i><br>Pending
+                    </div>
+                    <div class="status-step {% if booking.status == 'confirmed' %}active{% elif booking.status in 'arriving completed' %}completed{% endif %}">
+                        <i class="fas fa-check-circle"></i><br>Confirmed
+                    </div>
+                    <div class="status-step {% if booking.status == 'arriving' %}active{% elif booking.status == 'completed' %}completed{% endif %}">
+                        <i class="fas fa-truck"></i><br>Arriving
+                    </div>
+                    <div class="status-step {% if booking.status == 'arrived' %}active{% elif booking.status == 'completed' %}completed{% endif %}">
+                        <i class="fas fa-truck"></i><br>Arrived
+                    </div>
+                    <div class="status-step {% if booking.status == 'completed' %}active completed{% endif %}">
+                        <i class="fas fa-box-open"></i><br>Completed
+                    </div>
+                </div>
+
+                {% if booking.status in 'pending confirmed arriving' %}
+                    <button class="btn btn-danger cancel-btn" data-id="{{ booking.id }}">Cancel Booking</button>
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="alert alert-info">No current bookings.</div>
+    {% endif %}
+
+    <h2 class="mt-5 mb-3">Past Bookings</h2>
+    {% if past_bookings %}
+        {% for booking in past_bookings %}
+            <div class="booking-card">
+                <div class="d-flex align-items-center mb-3">
+                    {% if booking.provider.user.profile_pic %}
+                        <img src="{{ booking.provider.user.profile_pic.url }}" class="rounded-circle me-3">
+                    {% else %}
+                        <img src="{% static 'main/default-profile.png' %}" class="rounded-circle me-3">
+                    {% endif %}
+                    <div>
+                        <h5>{{ booking.provider.user.username }}</h5>
+                        <small>{{ booking.provider.user.email }}</small>
+                    </div>
+                </div>
+                <p><strong>Phone:</strong> {{ booking.service.phone }}</p>
+                <p><strong>Address:</strong> {{ booking.service.address }}</p>
+                <p><strong>Service:</strong> {{ booking.service.service_type.profession_name }}</p>
+                <p><strong>Price:</strong> ₹{{ booking.service.price }}</p>
+                <p><strong>Scheduled:</strong> {{ booking.schedule_date }} | {{ booking.timing }}</p>
+                <p><strong>Status:</strong> 
+                    <span class="{% if booking.status == 'cancelled' %}text-danger{% else %}text-success{% endif %}">
+                        {{ booking.status|capfirst }}
+                    </span>
+                </p>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="alert alert-info">No past bookings.</div>
+    {% endif %}
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function(){
+    $('.cancel-btn').on('click', function(){
+        const bookingId = $(this).data('id');
+        if(confirm('Are you sure you want to cancel this booking?')){
+            $.post('/users/booking/cancel/', {
+                booking_id: bookingId,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            }, function(response){
+                if(response.success){
+                    alert('Booking cancelled successfully!');
+                    location.reload();
+                } else {
+                    alert(response.message || 'Failed to cancel booking.');
+                }
+            });
+        }
+    });
+});
+</script>
+
+</body>
+</html>

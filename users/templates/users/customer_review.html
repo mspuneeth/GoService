@@ -1,0 +1,138 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoService - Write a Review</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #ff914d, #fff4e6);
+            font-family: 'Poppins', sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .review-card {
+            background-color: #fff;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            padding: 40px 30px;
+            width: 500px;
+            max-width: 95%;
+            text-align: center;
+            position: relative;
+            transition: 0.3s;
+        }
+        .review-card:hover {
+            transform: translateY(-5px);
+        }
+        .profile-pic {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #ff914d;
+            margin-bottom: 15px;
+        }
+        h3 {
+            color: #ff6a00;
+            font-family: 'Pacifico', cursive;
+            margin-bottom: 10px;
+        }
+        .form-control {
+            border-radius: 12px;
+            border: 1px solid #ffb366;
+            resize: none;
+        }
+        .btn-orange {
+            background-color: #ff6a00;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 18px;
+            transition: 0.3s;
+        }
+        .btn-orange:hover {
+            background-color: #e65c00;
+            transform: translateY(-2px);
+        }
+        .btn-clear {
+            background-color: #fff;
+            color: #ff6a00;
+            border: 2px solid #ff6a00;
+            border-radius: 10px;
+            padding: 10px 18px;
+            transition: 0.3s;
+        }
+        .btn-clear:hover {
+            background-color: #fff4e6;
+        }
+        .success-msg {
+            display: none;
+            color: green;
+            font-weight: 600;
+            margin-top: 10px;
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from {opacity: 0;}
+            to {opacity: 1;}
+        }
+    </style>
+</head>
+<body>
+
+    <div class="review-card">
+        {% if customer.user.profile_pic %}
+            <img src="{{ customer.user.profile_pic.url }}" class="profile-pic" alt="Profile Picture">
+        {% else %}
+            <img src="{% static 'main/default_profile.png' %}" class="profile-pic" alt="Profile Picture">
+        {% endif %}
+
+        <h3>{{ customer.user.username }}</h3>
+        <p class="text-muted mb-3">We value your feedback!</p>
+
+        <form id="reviewForm" method="POST">
+            {% csrf_token %}
+            <textarea name="review" class="form-control mb-3" rows="4" placeholder="Write your experience with GoService..." required></textarea>
+            
+            <div class="d-flex justify-content-between">
+                <button type="submit" class="btn btn-orange w-50 me-2">Submit</button>
+                <button type="reset" class="btn btn-clear w-50">Clear</button>
+            </div>
+        </form>
+
+        <div id="successMsg" class="success-msg">✅ Review submitted successfully!</div>
+
+        <a href="{% url 'customer_dashboard' %}" class="d-block mt-4 text-decoration-none" style="color: #ff6a00;">
+            ← Back to Dashboard
+        </a>
+    </div>
+
+    <script>
+        // Slight success animation before submitting
+        const form = document.getElementById('reviewForm');
+        const successMsg = document.getElementById('successMsg');
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault(); // stop immediate redirect
+            successMsg.style.display = 'block';
+
+            // delay a bit so user sees the message, then submit to Django
+            setTimeout(() => {
+                form.submit();
+            }, 800);
+        });
+    </script>
+
+</body>
+</html>

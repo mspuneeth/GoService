@@ -1,0 +1,179 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - GoService</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Google Font (same as index page) -->
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #fff3e6 0%, #ffe0b2 100%);
+            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: #ff7a1a !important;
+            box-shadow: 0 4px 10px rgba(255, 102, 0, 0.3);
+        }
+
+        .navbar-brand {
+            font-family: 'Pacifico', cursive;
+            color: #fff !important;
+            font-size: 1.8rem;
+            letter-spacing: 1px;
+        }
+
+        .nav-link {
+            color: #fff !important;
+            font-weight: 500;
+            margin: 0 6px;
+            transition: 0.3s;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: #fff3e6 !important;
+            text-decoration: underline;
+        }
+
+        /* Profile Card */
+        .profile-card {
+            background: #fffdf8;
+            border-radius: 20px;
+            padding: 40px 35px;
+            max-width: 600px;
+            margin: 80px auto;
+            box-shadow: 0 8px 25px rgba(255, 140, 0, 0.25);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .profile-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px rgba(255, 140, 0, 0.35);
+        }
+
+        .profile-pic {
+            width: 130px;
+            height: 130px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid #ffb84d;
+            margin-bottom: 20px;
+            box-shadow: 0 0 10px rgba(255, 102, 0, 0.4);
+        }
+
+        h3 {
+            font-weight: 700;
+            color: #ff6600;
+            margin-bottom: 20px;
+        }
+
+        .profile-info {
+            text-align: left;
+            line-height: 1.7;
+        }
+
+        .profile-info p {
+            font-size: 1rem;
+            margin: 6px 0;
+            color: #444;
+        }
+
+        .profile-info strong {
+            color: #ff6600;
+        }
+
+        /* Button */
+        .btn-warning {
+            background-color: #ff6600 !important;
+            border: none;
+            font-weight: 600;
+            color: #fff;
+            padding: 10px 25px;
+            border-radius: 12px;
+            transition: 0.3s;
+        }
+
+        .btn-warning:hover {
+            background-color: #e65c00 !important;
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(255, 102, 0, 0.4);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .profile-card {
+                margin: 60px 20px;
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'provider_dashboard' %}">GoService</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link" href="{% url 'provider_dashboard' %}">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'list_service' %}">List</a></li>
+                <li class="nav-item"><a class="nav-link active" href="{% url 'provider_profile' %}">My Profile</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Profile Card -->
+<div class="profile-card text-center">
+    {% if provider.user.profile_pic %}
+        <img src="{{ provider.user.profile_pic.url }}" alt="Profile Picture" class="profile-pic">
+    {% else %}
+        <img src="{% static 'main/default_profile.png' %}" alt="Profile Picture" class="profile-pic">
+    {% endif %}
+
+    <h3>{{ provider.user.username }}</h3>
+
+    <div class="profile-info">
+        <p><strong>Email:</strong> {{ provider.user.email }}</p>
+
+        <p><strong>Phone:</strong> 
+            {% if provider.phone %}
+                {{ provider.phone }}
+            {% elif service %}
+                {{ service.phone }}
+            {% else %}
+                Not available
+            {% endif %}
+        </p>
+
+        <p><strong>Service Type:</strong>
+            {% if service %}
+                {{ service.service_type.profession_name }}
+            {% else %}
+                Not available
+            {% endif %}
+        </p>
+
+        <p><strong>Address:</strong> {{ service.address|default:"Not available" }}</p>
+        <p><strong>Experience:</strong> {{ service.experience|default:"Not available" }}</p>
+        <p><strong>Price (₹/Service):</strong> {{ service.price|default:"Not available" }}</p>
+    </div>
+
+    <a href="{% url 'provider_dashboard' %}" class="btn btn-warning mt-4">← Back to Dashboard</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

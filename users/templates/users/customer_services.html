@@ -1,0 +1,127 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Our Services - GoService</title>
+    <link rel="stylesheet" href="{% static 'main/style.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #fff8f0;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #ff6600;
+            padding: 10px 30px;
+            color: white;
+        }
+
+        .navbar .logo {
+            font-family: 'Pacifico', cursive;
+            font-size: 26px;
+            cursor: pointer;
+        }
+
+        .navbar ul {
+            list-style: none;
+            display: flex;
+            gap: 25px;
+            margin: 0;
+        }
+
+        .navbar ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .navbar ul li a:hover {
+            color: #000;
+        }
+
+        /* Page content */
+        h2 {
+            text-align: center;
+            color: #ff6600;
+            margin-top: 30px;
+        }
+
+        .services-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin: 30px;
+        }
+
+        .service-card {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            border-radius: 10px;
+            overflow: hidden;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+        }
+
+        .service-card:hover {
+            transform: scale(1.03);
+        }
+
+        .service-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .service-card span {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.5);
+            color: #fff;
+            text-align: center;
+            padding: 5px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar (same as customer dashboard) -->
+    <div class="navbar">
+        <div class="logo" onclick="location.href='{% url 'customer_dashboard' %}'">GoService</div>
+        <ul>
+            <li><a href="{% url 'customer_dashboard' %}">Home</a></li>
+            <li><a href="{% url 'customer_services' %}">Our Services</a></li>
+            <li><a href="{% url 'customer_bookings' %}">My Bookings</a></li>
+            <li><a href="{% url 'customer_profile' %}">Profile</a></li>
+            <li><a href="{% url 'customer_review' %}">Review</a></li>
+            <li><a href="{% url 'logout' %}">Logout</a></li>
+        </ul>
+    </div>
+
+    <!-- Services Section -->
+    <h2>Our Services</h2>
+    <div class="services-container">
+        {% for service in services %}
+        <div class="service-card" onclick="location.href='{% url 'customer_providers_by_service' service.profession_name %}'">
+            <img src="{{ service.image.url }}" alt="{{ service.profession_name }}">
+            <span>{{ service.profession_name }}</span>
+        </div>
+        {% empty %}
+        <p style="text-align:center; color:#ff6600; font-weight:bold;">No services available.</p>
+        {% endfor %}
+    </div>
+
+</body>
+</html>

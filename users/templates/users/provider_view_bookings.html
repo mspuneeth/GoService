@@ -1,0 +1,249 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Provider Bookings - GoService</title>
+
+    <!-- Bootstrap & FontAwesome -->
+    <link rel="stylesheet" href="{% static 'main/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@500;600&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #fff8f0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Navbar */
+        nav {
+            background-color: #ff6600;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 25px;
+            border-bottom: 3px solid #e65c00;
+            box-shadow: 0 4px 10px rgba(255, 102, 0, 0.3);
+        }
+        .nav-left a, .nav-right a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 6px 12px;
+            border-radius: 8px;
+            transition: background 0.3s, transform 0.3s;
+        }
+        .nav-left a:hover, .nav-right a:hover {
+            background-color: #e65c00;
+            transform: scale(1.05);
+        }
+
+        /* Brand */
+        .nav-left a:first-child {
+            font-family: 'Pacifico', cursive;
+            font-size: 1.8rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-right: 15px;
+        }
+
+        /* Banner */
+        .banner img {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(255, 153, 0, 0.3);
+        }
+
+        /* Booking Cards */
+        .booking-card {
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(255, 102, 0, 0.15);
+            padding: 18px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .booking-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(255, 102, 0, 0.25);
+        }
+
+        .status-dropdown {
+            width: 160px;
+            border-radius: 8px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #ff6600;
+            color: white;
+            text-align: center;
+            padding: 25px 0;
+            margin-top: 40px;
+            font-size: 0.95rem;
+            box-shadow: 0 -4px 10px rgba(255, 102, 0, 0.2);
+        }
+        footer a {
+            color: white;
+            margin: 0 8px;
+            transition: color 0.3s;
+        }
+        footer a:hover {
+            color: #ffe6cc;
+        }
+    </style>
+</head>
+<body>
+
+{% if messages %}
+  <div class="container mt-3">
+    {% for message in messages %}
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+<!-- Navbar -->
+<nav>
+    <div class="nav-left">
+        <a href="{% url 'provider_dashboard' %}">GoService</a>
+        <a href="{% url 'provider_dashboard' %}">Home</a>
+        <a href="{% url 'list_service' %}">List</a>
+        <a href="{% url 'provider_profile' %}">My Profile</a>
+        <a href="{% url 'provider_view_bookings' %}">View Bookings</a>
+    </div>
+    <div class="nav-right">
+        <a href="{% url 'logout' %}">Logout</a>
+    </div>
+</nav>
+
+<!-- Banner -->
+<div class="banner">
+    <img src="{% static 'main/pexels.png' %}" alt="Dashboard Banner">
+</div>
+
+<!-- Bookings Section -->
+<div class="container mb-5">
+    <h2 class="text-center mb-4" style="color:#ff6600; font-weight:700;">My Bookings</h2>
+
+    {% if bookings %}
+        <div class="row g-4">
+        {% for booking in bookings %}
+            <div class="col-md-6">
+                <div class="booking-card" id="booking-card-{{ booking.id }}">
+                    <div class="d-flex align-items-center mb-2">
+                        {% if booking.customer.user.profile_pic %}
+                            <img src="{{ booking.customer.user.profile_pic.url }}" class="rounded-circle me-3" width="60" height="60">
+                        {% else %}
+                            <img src="{% static 'main/default-profile.png' %}" class="rounded-circle me-3" width="60" height="60">
+                        {% endif %}
+                        <div>
+                            <h5>{{ booking.customer.user.username }}</h5>
+                            <small class="text-muted">{{ booking.customer.user.email }}</small>
+                        </div>
+                    </div>
+
+                    <p><strong>Phone:</strong> {{ booking.customer.phone }}</p>
+                    <p><strong>Address:</strong> {{ booking.customer.address }}</p>
+                    <p><strong>Service:</strong> {{ booking.service.service_type.profession_name }}</p>
+                    <p><strong>Scheduled Date:</strong> {{ booking.schedule_date }}</p>
+                    <p><strong>Timing:</strong> {{ booking.timing }}</p>
+
+                    <p><strong>Status:</strong>
+                        <span id="status-{{ booking.id }}" class="fw-bold text-capitalize
+                        {% if booking.status == 'pending' %}text-primary
+                        {% elif booking.status == 'cancelled' or booking.status == 'rejected' %}text-danger
+                        {% elif booking.status == 'completed' %}text-secondary
+                        {% else %}text-success{% endif %}">
+                            {{ booking.status }}
+                        </span>
+                    </p>
+
+                    <div class="d-flex align-items-center gap-2 action-area" id="action-{{ booking.id }}">
+                        {% if booking.status == 'pending' %}
+                            <button class="btn btn-success btn-sm" onclick="updateStatus({{ booking.id }}, 'accepted')">Accept</button>
+                            <button class="btn btn-danger btn-sm" onclick="updateStatus({{ booking.id }}, 'rejected')">Reject</button>
+
+                        {% elif booking.status in 'accepted confirmed arriving arrived' %}
+                            <select class="form-select form-select-sm status-dropdown" onchange="updateStatus({{ booking.id }}, this.value)">
+                                <option value="">Select Status</option>
+                                <option value="confirmed" {% if booking.status == 'confirmed' %}selected{% endif %}>Confirmed</option>
+                                <option value="arriving" {% if booking.status == 'arriving' %}selected{% endif %}>Arriving</option>
+                                <option value="arrived" {% if booking.status == 'arrived' %}selected{% endif %}>Arrived</option>
+                                <option value="completed" {% if booking.status == 'completed' %}selected{% endif %}>Completed</option>
+                            </select>
+
+                        {% elif booking.status == 'cancelled' or booking.status == 'rejected' %}
+                            <span class="badge bg-danger">Cancelled</span>
+
+                        {% elif booking.status == 'completed' %}
+                            <span class="badge bg-success">Completed</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info text-center">No bookings yet.</div>
+    {% endif %}
+</div>
+
+<!-- Footer -->
+<footer>
+    <div class="contact-info mb-2">
+        <i class="fas fa-envelope"></i> info@goservice.com &nbsp; | &nbsp;
+        <i class="fas fa-phone"></i> +91 9876543210 &nbsp; | &nbsp;
+        <i class="fas fa-map-marker-alt"></i> Bengaluru, India
+    </div>
+    <div class="social-icons mb-2">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+    </div>
+    &copy; 2025 GoService - BY PUNEETH.
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+function updateStatus(bookingId, status) {
+    if (!status) return;
+
+    fetch(`/users/dashboard/provider/bookings/update/${bookingId}/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status: status }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            const statusEl = document.getElementById(`status-${bookingId}`);
+            statusEl.textContent = data.new_status;
+            statusEl.classList.remove('text-primary', 'text-danger');
+            statusEl.classList.add('text-success', 'text-capitalize');
+            document.getElementById(`action-${bookingId}`).innerHTML = data.updated_html;
+        } else {
+            alert('Failed to update booking status.');
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+</script>
+
+</body>
+</html>

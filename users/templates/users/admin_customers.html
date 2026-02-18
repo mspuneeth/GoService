@@ -1,0 +1,71 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View Customers - Admin Dashboard</title>
+    <link rel="stylesheet" href="{% static 'main/style.css' %}">
+    <style>
+        body { margin:0; font-family: Arial, sans-serif; background-color: #fff8f0; }
+        .navbar { background-color: #ff6600; padding: 10px; display: flex; align-items: center; color: #fff; }
+        .navbar a { color: #fff; margin-right: 15px; text-decoration: none; font-weight: bold; }
+        .navbar .logo { font-size: 20px; font-weight: bold; margin-right: auto; }
+        .content { padding: 20px; max-width: 1000px; margin: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        table th, table td { padding: 8px; border: 1px solid #ffcc99; text-align: left; }
+        table th { background-color: #ffcc99; }
+        img.profile-pic { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; }
+        .btn-delete { background-color: #ff3300; color: #fff; border: none; padding: 5px 10px; border-radius: 4px; text-decoration: none; }
+        .btn-delete:hover { background-color: #cc2900; }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<div class="navbar">
+    <div class="logo">GoService</div>
+    <a href="{% url 'admin_dashboard' %}">Dashboard</a>
+    <a href="{% url 'admin_view_customers' %}">View Customers</a>
+    <a href="{% url 'admin_view_providers' %}">View Service Providers</a>
+    <a href="{% url 'view_services' %}">View Services</a>
+    <a href="{% url 'add_service' %}">Add Services</a>
+    <span style="margin-left: 15px; font-weight: bold;">Earnings: ₹0</span>
+    <a href="{% url 'logout' %}" style="margin-left:auto;">Logout</a>
+</div>
+
+<div class="content">
+    <h2>Registered Customers</h2>
+    <table>
+        <tr>
+            <th>Profile Pic</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Address</th>
+            <th>Action</th>
+        </tr>
+        {% for customer in customers %}
+        <tr>
+            <td>
+                {% if customer.user.profile_pic %}
+                    <img class="profile-pic" src="{{ customer.user.profile_pic.url }}" alt="Profile Pic">
+                {% else %}
+                    <img class="profile-pic" src="{% static 'main/lastfix1.png' %}" alt="Default Pic">
+                {% endif %}
+            </td>
+            <td>{{ customer.user.username }}</td>
+            <td>{{ customer.user.email }}</td>
+            <td>{{ customer.phone|default:"-" }}</td>
+            <td>{{ customer.address|default:"-" }}</td>
+            <td>
+                <a href="{% url 'admin_delete_customer' customer.id %}" class="btn-delete">Delete</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="6" class="text-center">No customers found.</td></tr>
+        {% endfor %}
+    </table>
+</div>
+
+</body>
+</html>

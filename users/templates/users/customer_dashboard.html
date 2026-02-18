@@ -1,0 +1,115 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoService - Customer Dashboard</title>
+
+    <!-- Google Fonts for Logo -->
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'main/style.css' %}">
+
+    <style>
+        /* Navbar */
+        .navbar-custom { background-color: #ff9900; }
+        .navbar-custom .nav-link { color: #fff; }
+        .navbar-custom .nav-link:hover { color: #ffd699; }
+
+        /* Logo font */
+        .navbar-brand.logo-text {
+            font-family: 'Pacifico', cursive;
+            font-size: 1.8rem;
+            letter-spacing: 1px;
+            cursor: pointer;
+        }
+
+        /* Hero section */
+        .hero-section {
+            position: relative;
+            width: 100%;
+            height: 90vh;
+        }
+        .hero-section img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .hero-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            text-shadow: 2px 2px 4px #000;
+        }
+        .hero-text h1 {
+            font-size: 3rem;
+            font-weight: bold;
+        }
+        .hero-text p {
+            font-size: 1.5rem;
+        }
+
+        /* Footer */
+        .footer { 
+            background-color: #f7f1e0; 
+            color: #333; 
+            padding: 20px 0; 
+        }
+        .footer i { margin-right: 5px; }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-custom">
+    <div class="container">
+        <!-- Logo as Home button -->
+        <a class="navbar-brand logo-text" href="{% url 'customer_dashboard' %}">GoService</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link" href="{% url 'customer_dashboard' %}">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'customer_services' %}">Our Services</a></li>
+                <li class="nav-item"></li><a class="nav-link" href="{% url 'customer_bookings' %}">My Bookings</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'customer_profile' %}">Profile</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'customer_review' %}">Review</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero-section text-center">
+    <img src="{% static 'main/lastfix1.png' %}" alt="Customer Dashboard Hero">
+    <div class="hero-text">
+        <h1>Welcome to GoService</h1>
+        <p>Reliable home services at your doorstep</p>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer text-center">
+    <div>
+        <i class="fas fa-envelope"></i> info@goservice.com &nbsp; | &nbsp;
+        <i class="fas fa-phone"></i> +91 9876543210 &nbsp; | &nbsp;
+        <i class="fas fa-map-marker-alt"></i> Bengaluru, India
+    </div>
+    <div class="mt-2">
+        &copy; 2025 GoService - BY PUNEETH.
+    </div>
+</footer>
+
+</body>
+</html>
